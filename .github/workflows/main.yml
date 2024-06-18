@@ -1,0 +1,27 @@
+name: Code Style Check
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  style-check:
+    name: Check Code Style
+    runs-on: ubuntu-22.04
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Install clang-format
+      run: sudo apt-get update && sudo apt-get install -y clang-format
+
+    - name: Check code style
+      run: clang-format --verbose --Werror $(find . -name "*.cpp" -o -name "*.hpp")
+
+    - name: Commit style check results
+      run: git diff --exit-code
